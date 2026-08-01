@@ -10,6 +10,27 @@ A single manual workflow (`.github/workflows/publish-skills.yml`) does everythin
 2. **Version & tag** — `semantic-release` derives the next version from Conventional Commits since the last tag, bumps `package.json`/`package-lock.json`, commits that back to `main` (`[skip ci]`), and pushes a `v<version>` git tag.
 3. **Publish** — `gh release create` creates the GitHub Release at that tag. This release is what `gh skill install romainbellande/skills` consumes.
 
+```mermaid
+flowchart TD
+    C[Developer commits a<br/>Conventional Commit] --> P[Push / merge to main]
+    P --> L[commitlint CI validates<br/>commit message on PR]
+    P --> D[A human dispatches<br/>Publish Skills workflow<br/>workflow_dispatch]
+
+    subgraph W[Publish Skills workflow]
+        direction TB
+        V[gh skill publish --dry-run<br/>validate skills]
+        N[generate-release-notes.mjs<br/>semantic-release dry-run<br/>writes release-notes.md]
+        S[npx semantic-release<br/>derive version, bump package.json,<br/>commit to main, push v&lt;version&gt; tag]
+        R[gh release create &quot;$TAG&quot;<br/>--notes-file release-notes.md]
+        V --> N --> S --> R
+    end
+
+    D --> W
+    S -.no releasable commits.-o DONE[exit: nothing to publish]
+    R --> REL[(GitHub Release<br/>at v&lt;version&gt; tag)]
+    REL --> I[gh skill install<br/>romainbellande/skills]
+```
+
 ## Why `gh release create` instead of `gh skill publish`
 
 `gh skill publish` wants to own the version tag. When given `--tag`, it refuses to publish onto a tag that already exists:
