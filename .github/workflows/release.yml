@@ -7,31 +7,38 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   release:
-    name: Version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Create Version Pull Request
-        uses: changesets/action@v1
-        with:
-          version: npx changeset version
-          publish: npx changeset tag
-          commit: "chore: version skills"
-          title: "chore: version skills"
+      - name: Release
+        id: release
+        uses: semantic-release/semantic-release@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish skills
+        if: steps.release.outputs.new_release_published == 'true'
+        run: gh skill publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
