@@ -17,7 +17,7 @@ Adopt semantic-release for versioning, driven by a single manual release workflo
 - `gh skill publish` runs in the same workflow, first as a `--dry-run` validation gate, then with `--tag` on the tag semantic-release pushed. It owns the GitHub Release creation — the distribution mechanism `gh skill install` consumes.
 - If semantic-release cuts no new version (no releasable commits since the last tag), the publish step is skipped.
 - One-time switchover: tag current HEAD `v1.0.1` so the first release continues from the declared version.
-- The `github-actions` bot is allowed to bypass the `main` branch-protection rule so the bump commit + tag push can land. A PAT (`BOT_PAT_TOKEN`) is used in place of `GITHUB_TOKEN`; since the trigger is manual there is no push-driven re-trigger loop.
+- The `github-actions` bot is allowed to bypass the `main` branch-protection rule so the bump commit + tag push can land. `GITHUB_TOKEN` is used throughout; since the trigger is manual there is no push-driven re-trigger loop.
 
 Why this over changesets: no changeset files to write, no version PRs to shepherd; releases are deterministic from history and publishing stays a deliberate human action. Cost: release cadence depends entirely on commit-message discipline and on a human pressing the manual trigger.
 
