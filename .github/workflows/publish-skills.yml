@@ -12,8 +12,40 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate skills
+        run: gh skill publish --dry-run
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT_TOKEN }}
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT_TOKEN }}
+        run: |
+          git fetch --tags
+          BEFORE=$(git describe --tags --abbrev=0)
+          npx semantic-release
+          AFTER=$(git describe --tags --abbrev=0)
+          if [ "$BEFORE" = "$AFTER" ]; then
+            echo "No new version — nothing to publish."
+            exit 0
+          fi
+          echo "TAG=$AFTER" >> "$GITHUB_ENV"
 
       - name: Publish skills
-        run: gh skill publish
+        if: env.TAG != ''
+        run: gh skill publish --tag "$TAG"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_PAT_TOKEN }}
