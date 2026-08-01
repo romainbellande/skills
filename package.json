@@ -8,13 +8,13 @@
     "url": "https://github.com/romainbellande/skills"
   },
   "license": "MIT",
-  "scripts": {
-    "changeset": "changeset",
-    "version": "changeset version"
-  },
+  "scripts": {},
   "devDependencies": {
-    "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.30.0"
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@semantic-release/git": "^10.0.1",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "semantic-release": "^24.0.0"
   },
   "packageManager": "npm@10.9.4"
 }
