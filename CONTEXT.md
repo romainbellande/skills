@@ -4,12 +4,12 @@ Glossary for the single repository context. Terms here describe the domain, neve
 
 ## Release automation
 
-- **release**: a tagged, versioned snapshot of the package, published to GitHub as a Release with notes. Created automatically on push to `main` when the commits since the last release warrant a version change.
+- **release**: a tagged, versioned snapshot of the package, published to GitHub as a Release with notes. Created when a human manually dispatches the release workflow and the commits since the last release warrant a version change.
 - **version bump**: the increment of the declared package version (SemVer: `major.minor.patch`) plus a matching `v<version>` git tag.
 - **conventional commit**: a commit message of the form `type(scope): description` (e.g. `feat: add skill`). The commit type is the single source of truth for what a release will contain.
 - **changeset** (retired): a human-written file describing a pending version bump and changelog entry. Formerly the trigger for the versioning flow; replaced by conventional commits.
 - **semantic-release**: the tool that derives a version from conventional commits, writes the changelog, bumps the declared version, and tags + publishes the release.
-- **skill publish**: the act of publishing agent skills to their repository via `gh skill publish`; a separate concern from versioning, triggered manually from a `workflow_dispatch` workflow rather than on every release.
+- **skill publish**: the act of publishing agent skills to their repository via `gh skill publish`, creating the GitHub Release at the version tag semantic-release derived; part of the same manual release workflow, not a separate trigger.
 
 ## Version determinants
 
