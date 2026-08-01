@@ -9,7 +9,7 @@ Glossary for the single repository context. Terms here describe the domain, neve
 - **conventional commit**: a commit message of the form `type(scope): description` (e.g. `feat: add skill`). The commit type is the single source of truth for what a release will contain.
 - **changeset** (retired): a human-written file describing a pending version bump and changelog entry. Formerly the trigger for the versioning flow; replaced by conventional commits.
 - **semantic-release**: the tool that derives a version from conventional commits, writes the changelog, bumps the declared version, and tags + publishes the release.
-- **skill publish**: the act of publishing agent skills to their repository via `gh skill publish`; a separate concern from versioning, run after a release succeeds.
+- **skill publish**: the act of publishing agent skills to their repository via `gh skill publish`; a separate concern from versioning, triggered manually from a `workflow_dispatch` workflow rather than on every release.
 
 ## Version determinants
 

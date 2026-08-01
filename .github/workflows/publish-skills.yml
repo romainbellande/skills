@@ -1,0 +1,19 @@
+name: Publish Skills
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish skills
+        run: gh skill publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
