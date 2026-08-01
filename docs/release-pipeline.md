@@ -12,9 +12,11 @@ A single manual workflow (`.github/workflows/publish-skills.yml`) does everythin
 
 ```mermaid
 flowchart TD
-    C[Developer commits a<br/>Conventional Commit] --> P[Push / merge to main]
-    P --> L[commitlint CI validates<br/>commit message on PR]
-    P --> D[A human dispatches<br/>Publish Skills workflow<br/>workflow_dispatch]
+    C[Developer commits a<br/>Conventional Commit] --> B[Push feature branch<br/>and open a pull request]
+    B --> L[commitlint CI validates<br/>commit message on the PR]
+    L --> M[Merge to main]
+
+    M --> D[A human dispatches<br/>Publish Skills workflow<br/>workflow_dispatch]
 
     subgraph W[Publish Skills workflow]
         direction TB
